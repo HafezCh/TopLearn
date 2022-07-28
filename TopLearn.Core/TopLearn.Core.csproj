@@ -4,4 +4,11 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Convertors\" />
+    <Folder Include="DTOs\" />
+    <Folder Include="Services\" />
+    <Folder Include="Security\" />
+  </ItemGroup>
+
 </Project>
