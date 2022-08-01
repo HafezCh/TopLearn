@@ -1,0 +1,58 @@
+﻿@model TopLearn.Core.DTOs.RegisterViewModel
+@{
+    ViewData["Title"] = "ثبت نام";
+}
+
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">تاپ لرن</a></li>
+            <li class="breadcrumb-item active" aria-current="page">ثبت نام</li>
+        </ul>
+    </nav>
+</div>
+
+<main class="client-page">
+    <div class="container-content">
+
+        <header><h2> عضویت در سایت </h2></header>
+
+        <div class="form-layer">
+
+            <form asp-controller="Account" asp-action="Register" method="post">
+
+                <div class="input-group">
+                    <span class="input-group-addon" id="username"><i class="zmdi zmdi-account"></i></span>
+                    <input asp-for="UserName" class="form-control" placeholder="نام کاربری" aria-describedby="username">
+                </div>
+                <span asp-validation-for="UserName" class="text-danger"></span>
+
+                <div class="input-group">
+                    <span class="input-group-addon" id="email-address"><i class="zmdi zmdi-email"></i></span>
+                    <input asp-for="Email" class="form-control" placeholder="ایمیل" aria-describedby="email-address">
+                </div>
+                <span asp-validation-for="Email" class="text-danger"></span>
+
+                <div class="input-group">
+                    <span class="input-group-addon" id="password"><i class="zmdi zmdi-lock"></i></span>
+                    <input asp-for="Password" class="form-control" placeholder="رمز عبور " aria-describedby="password">
+                </div>
+                <span asp-validation-for="Password" class="text-danger"></span>
+
+                <div class="input-group">
+                    <span class="input-group-addon" id="repassword"><i class="zmdi zmdi-lock"></i></span>
+                    <input asp-for="RePassword" class="form-control" placeholder="تکرار رمز عبور " aria-describedby="password">
+                </div>
+                <span asp-validation-for="RePassword" class="text-danger"></span>
+
+                <div class="link">
+                    <a href="/Login"> <i class="zmdi zmdi-account"></i> ورود به سایت </a>
+                </div>
+
+                <button class="btn btn-success"> عضویت در سایت </button>
+
+            </form>
+        </div>
+
+    </div>
+</main>
