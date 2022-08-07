@@ -1,4 +1,5 @@
-﻿@model TopLearn.Core.DTOs.EditUserProfileViewModel
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model TopLearn.Core.DTOs.User.EditUserProfileViewModel
 @{
     ViewData["Title"] = "ویرایش حساب کاربری";
 }
@@ -27,14 +28,14 @@
                                 
                                 <input type="hidden" asp-for="UserId"/>
                                 <input type="hidden" asp-for="CurrentAvatar"/>
+                                <input type="hidden" asp-for="UserName"/>
 
                                 <div class="row">
                                     <div class="col-md-7 col-sm-8 col-xs-12">
                                         <div class="input-group">
-                                            <span class="input-group-addon" id="username"><i class="zmdi zmdi-account"></i></span>
-                                            <input asp-for="UserName" class="form-control" placeholder="نام کاربری" aria-describedby="username">
+                                            <label>نام کاربری:&nbsp;</label>
+                                            <label class="text-success">@Model.UserName</label>
                                         </div>
-                                        <span asp-validation-for="UserName" class="text-danger"></span>
                                     </div>
                                     <div class="col-md-7 col-sm-8 col-xs-12">
                                         <div class="input-group">

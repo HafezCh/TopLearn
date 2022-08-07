@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
-namespace TopLearn.Core.DTOs
+namespace TopLearn.Core.DTOs.User
 {
     public class InformationUserViewModel
     {

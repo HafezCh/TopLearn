@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>@ViewData["Title"] | پنل ادمین</title>
+
+    <!-- Core CSS - Include with every page -->
+    <link href="~/AdminTheme/css/bootstrap-rtl.css" rel="stylesheet">
+    <link href="~/AdminTheme/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Page-Level Plugin CSS - Dashboard -->
+    <link href="~/AdminTheme/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+    <link href="~/AdminTheme/css/plugins/timeline/timeline.css" rel="stylesheet">
+
+    <!-- SB Admin CSS - Include with every page -->
+    <link href="~/AdminTheme/css/sb-admin.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">TopLearn</a>
+            </div>
+            <!-- /.navbar-header -->
+
+            <div class="navbar-default navbar-static-side" role="navigation">
+                <div class="sidebar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li class="sidebar-search">
+                            <div class="input-group custom-search-form">
+                                <input type="text" class="form-control" placeholder="Search...">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                            <!-- /input-group -->
+                        </li>
+                        <li>
+                            <a href="/" target="_blank"><i class="fa fa-arrow-circle-left fa-fw"></i> صفحه اصلی سایت</a>
+                        </li>
+                        <li>
+                            <a href="/Administration"><i class="fa fa-dashboard fa-fw"></i> داشبورد</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> مدیریت کاربران<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="/Administration/UsersManagement">کاربران</a>
+                                </li>
+                                <li>
+                                    <a href="/Administration/UsersManagement/RemovedUsers">کاربران حذف شده</a>
+                                </li>
+                                <li>
+                                    <a href="/Administration/RolesManagement">دسترسی ها</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                    </ul>
+                    <!-- /#side-menu -->
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+
+        <div id="page-wrapper">
+            @RenderBody()
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- Core Scripts - Include with every page -->
+    <script src="~/AdminTheme/js/jquery-1.10.2.js"></script>
+    <script src="~/AdminTheme/js/bootstrap.min.js"></script>
+    <script src="~/AdminTheme/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+
+    <!-- Page-Level Plugin Scripts - Dashboard -->
+    <script src="~/AdminTheme/js/plugins/morris/raphael-2.1.0.min.js"></script>
+    <script src="~/AdminTheme/js/plugins/morris/morris.js"></script>
+
+    <!-- SB Admin Scripts - Include with every page -->
+    <script src="~/AdminTheme/js/sb-admin.js"></script>
+
+    <!-- Page-Level Demo Scripts - Dashboard - Use for reference -->
+<script src="~/AdminTheme/js/demo/dashboard-demo.js"></script>
+
+@RenderSection("Scripts",false);
+
+</body>
+
+</html>

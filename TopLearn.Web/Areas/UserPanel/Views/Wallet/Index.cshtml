@@ -1,6 +1,7 @@
-﻿@using TopLearn.Core.DTOs
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using TopLearn.Core.Convertors
-@model TopLearn.Core.DTOs.ChargeWalletViewModel
+@using TopLearn.Core.DTOs.User
+@model TopLearn.Core.DTOs.User.ChargeWalletViewModel
 @{
     ViewData["Title"] = "Index";
     var list = ViewBag.WalletList as List<WalletViewModel>;

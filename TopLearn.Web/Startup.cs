@@ -27,6 +27,8 @@ namespace TopLearn.Web
         {
             services.AddControllersWithViews();
 
+            services.AddRazorPages();
+
             var connectionString = Configuration.GetConnectionString("TopLearn_DB");
 
             services.AddDbContext<TopLearnDbContext>(options =>
@@ -38,6 +40,8 @@ namespace TopLearn.Web
 
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IViewRenderService, RenderViewToString>();
+            services.AddTransient<IPermissionService, PermissionService>();
+            services.AddTransient<ICourseService, CourseService>();
 
             #endregion
 
@@ -82,7 +86,6 @@ namespace TopLearn.Web
             app.UseAuthentication();
             app.UseAuthorization();
 
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -96,6 +99,7 @@ namespace TopLearn.Web
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
         }
     }

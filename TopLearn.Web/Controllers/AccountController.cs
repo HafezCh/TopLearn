@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using TopLearn.Core.Convertors;
-using TopLearn.Core.DTOs;
+using TopLearn.Core.DTOs.User;
 using TopLearn.Core.Generator;
 using TopLearn.Core.Security;
 using TopLearn.Core.Senders;

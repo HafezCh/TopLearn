@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TopLearn.Core.DTOs;
+using TopLearn.Core.DTOs.User;
 using TopLearn.Core.Services.Interfaces;
 
 namespace TopLearn.Web.Areas.UserPanel.Controllers

@@ -2,8 +2,8 @@
 <html class="no-js" dir="rtl" lang="fa-IR">
 <head>
     <title> تاپ لرن | @ViewData["Title"] </title>
-    <partial name="Meta"/>
-    <partial name="Css"/>
+    <partial name="Meta" />
+    <partial name="Css" />
     <script src="~/js/jquery.min.js"></script>
 </head>
 <body>
@@ -27,19 +27,19 @@
                         <div class="clientarea">
                             @if (User.Identity.IsAuthenticated)
                             {
-                            <div class="loggein">
-                                <i class="zmdi zmdi-account"></i><a href="/UserPanel"> @User.Identity.Name ، خوش آمدی </a>
-                                /
-                                <a href="/Logout"> خروج </a>
-                            </div>
+                                <div class="loggein">
+                                    <i class="zmdi zmdi-account"></i><a href="/UserPanel"> @User.Identity.Name ، خوش آمدی </a>
+                                    /
+                                    <a href="/Logout"> خروج </a>
+                                </div>
                             }
                             else
                             {
-                            <div class="signin">
-                                <i class="zmdi zmdi-account"></i>
-                                <a href="/Login"> ورود </a> /
-                                <a href="/Register"> عضویت </a>
-                            </div>
+                                <div class="signin">
+                                    <i class="zmdi zmdi-account"></i>
+                                    <a href="/Login"> ورود </a> /
+                                    <a href="/Register"> عضویت </a>
+                                </div>
                             }
                         </div>
                     </div>
@@ -50,17 +50,17 @@
     </div>
 
     <!-- main manu -->
-<partial name="Menu"/>
+    @await Component.InvokeAsync("CourseGroup")
     <!-- /main manu -->
     <!-- content -->
     @RenderBody()
     <!-- /content -->
     <!-- footer -->
-<partial name="Footer"/>
-        <!-- /footer -->
+    <partial name="Footer" />
+    <!-- /footer -->
 
-        <script src="~/js/bootstrap.min.js"></script>
-<script src="~/js/script.js"></script>
-<partial name="_ValidationScriptsPartial"/>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/script.js"></script>
+    <partial name="_ValidationScriptsPartial" />
 </body>
 </html>

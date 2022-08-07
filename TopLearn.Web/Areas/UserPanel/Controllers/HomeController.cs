@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TopLearn.Core.Convertors;
-using TopLearn.Core.DTOs;
+using TopLearn.Core.DTOs.User;
 using TopLearn.Core.Services.Interfaces;
 
 namespace TopLearn.Web.Areas.UserPanel.Controllers
@@ -40,11 +38,11 @@ namespace TopLearn.Web.Areas.UserPanel.Controllers
         {
             if (!ModelState.IsValid) return View(command);
 
-            if (_userService.IsExistUserNameForEditProfile(command.UserName, command.UserId))
+            /*if (_userService.IsExistUserNameForEditProfile(command.UserName, command.UserId))
             {
                 ModelState.AddModelError("UserName", "نام کاربری نامعتبر است");
                 return View(command);
-            }
+            }*/
 
             var email = FixedText.FixEmail(command.Email);
 
@@ -57,9 +55,9 @@ namespace TopLearn.Web.Areas.UserPanel.Controllers
             _userService.EditProfile(User.Identity.Name, command);
 
             //Log Out User
-            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            //HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            return Redirect("/Login?editProfile=true");
+            return Redirect("/UserPanel");
         }
 
         #endregion

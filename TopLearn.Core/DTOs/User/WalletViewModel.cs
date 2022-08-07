@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TopLearn.Core.DTOs
+namespace TopLearn.Core.DTOs.User
 {
     public class WalletViewModel
     {

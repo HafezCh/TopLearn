@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TopLearn.Core.Convertors;
-using TopLearn.Core.DTOs;
+using TopLearn.Core.DTOs.User;
 using TopLearn.Core.Security;
 using TopLearn.Core.Senders;
 using TopLearn.Core.Services.Interfaces;
@@ -43,6 +44,40 @@ namespace TopLearn.Core.Services
             _context.Users.Add(user);
             _context.SaveChanges();
             return user.UserId;
+        }
+
+        public int AddUserFromAdmin(CreateUserFromAdminViewModel user)
+        {
+            var newUser = new User
+            {
+                UserName = user.UserName,
+                RegisterDate = DateTime.Now,
+                IsActive = true,
+                Email = FixedText.FixEmail(user.Email),
+                ActiveCode = Generator.Generator.GenerateUniqCode(),
+                Password = PasswordHelper.EncodePasswordMd5(user.Password)
+            };
+
+            #region UploadAvatar
+
+
+            if (user.UserAvatar != null)
+            {
+                newUser.UserAvatar = Generator.Generator.GenerateUniqCode() + Path.GetExtension(user.UserAvatar.FileName);
+                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/UserAvatars", newUser.UserAvatar);
+                using (var stream = new FileStream(imagePath, FileMode.Create))
+                {
+                    user.UserAvatar.CopyTo(stream);
+                }
+            }
+            else
+            {
+                newUser.UserAvatar = "Default.gif";
+            }
+
+            #endregion
+
+            return AddUser(newUser);
         }
 
         public int AddWallet(Wallet wallet)
@@ -98,26 +133,13 @@ namespace TopLearn.Core.Services
 
         public void EditProfile(string userName, EditUserProfileViewModel profile)
         {
+            var user = GetByUserName(userName);
+
             if (profile.NewAvatar != null)
             {
-                string imagePath = "";
-                if (profile.CurrentAvatar != "Default.gif")
-                {
-                    imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/UserAvatars", profile.CurrentAvatar);
-                    if (File.Exists(imagePath))
-                    {
-                        File.Delete(imagePath);
-                    }
-                }
-
-                profile.CurrentAvatar = Generator.Generator.GenerateUniqCode() + Path.GetExtension(profile.NewAvatar.FileName);
-                imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/UserAvatars", profile.CurrentAvatar);
-                using (var stream = new FileStream(imagePath, FileMode.Create))
-                {
-                    profile.NewAvatar.CopyTo(stream);
-                }
+                var newAvatarPath = SaveUserAvatar(profile.CurrentAvatar, profile.NewAvatar);
+                user.UserAvatar = newAvatarPath;
             }
-            var user = GetByUserName(userName);
 
             if (user.Email != profile.Email)
             {
@@ -128,10 +150,37 @@ namespace TopLearn.Core.Services
 
             user.UserName = profile.UserName;
             user.Email = profile.Email;
-            user.UserAvatar = profile.CurrentAvatar;
 
             UpdateUser(user);
 
+        }
+
+        public void EditUserFromAdmin(EditUserFromAdminViewModel editModel)
+        {
+            var user = GetUserByUserId(editModel.UserId);
+            user.UserName = editModel.UserName;
+
+            if (!string.IsNullOrWhiteSpace(editModel.Password))
+                user.Password = PasswordHelper.EncodePasswordMd5(editModel.Password);
+
+            #region Edit Avatar
+
+            if (editModel.UserAvatar != null)
+            {
+                var newAvatarPath = SaveUserAvatar(editModel.CurrentAvatar, editModel.UserAvatar);
+                user.UserAvatar = newAvatarPath;
+            }
+
+            #endregion
+
+            if (user.Email != editModel.Email)
+            {
+                user.IsActive = false;
+                var emailBody = _viewRenderService.RenderToStringAsync("_ActiveEmail", user);
+                SendEmail.Send(editModel.Email, "فعال سازی حساب کاربری", emailBody);
+            }
+
+            UpdateUser(user);
         }
 
         public User GetByActiveCode(string activeCode)
@@ -160,6 +209,31 @@ namespace TopLearn.Core.Services
             }).Single(x => x.UserName == userName);
         }
 
+        public UserForAdminViewModel GetRemovedUsers(int pageId = 1, string emailFilter = "", string userNameFilter = "")
+        {
+            IQueryable<User> query = _context.Users.IgnoreQueryFilters().Where(x => x.IsRemoved);
+
+            if (!string.IsNullOrWhiteSpace(emailFilter))
+                query = query.Where(x => x.Email.Contains(emailFilter));
+
+            if (!string.IsNullOrWhiteSpace(userNameFilter))
+                query = query.Where(x => x.UserName.Contains(userNameFilter));
+
+            // Show Item In Page
+
+            int take = 5;
+            int skip = (pageId - 1) * take;
+
+            var model = new UserForAdminViewModel
+            {
+                CurrentPage = pageId,
+                PageCount = query.Count() / take,
+                Users = query.OrderBy(u => u.RegisterDate).Skip(skip).Take(take).ToList()
+            };
+
+            return model;
+        }
+
         public SlideBarUserPanelViewModel GetSlideBarUserPanel(string userName)
         {
             return _context.Users.Select(x => new SlideBarUserPanelViewModel
@@ -168,6 +242,23 @@ namespace TopLearn.Core.Services
                 Avatar = x.UserAvatar,
                 RegisterDate = x.RegisterDate
             }).Single(x => x.UserName == userName);
+        }
+
+        public User GetUserByUserId(int userId)
+        {
+            return _context.Users.SingleOrDefault(x => x.UserId == userId);
+        }
+
+        public EditUserFromAdminViewModel GetUserDetailsForEditFromAdmin(int userId)
+        {
+            return _context.Users.Select(x => new EditUserFromAdminViewModel
+            {
+                UserId = x.UserId,
+                UserName = x.UserName,
+                Email = x.Email,
+                CurrentAvatar = x.UserAvatar,
+                UserRoles = x.UserRoles.Select(x => x.RoleId).ToList()
+            }).Single(x => x.UserId == userId);
         }
 
         public int GetUserIdByUserName(string userName)
@@ -188,6 +279,31 @@ namespace TopLearn.Core.Services
             };
 
             return info;
+        }
+
+        public UserForAdminViewModel GetUsers(int pageId = 1, string emailFilter = "", string userNameFilter = "")
+        {
+            IQueryable<User> query = _context.Users;
+
+            if (!string.IsNullOrWhiteSpace(emailFilter))
+                query = query.Where(x => x.Email.Contains(emailFilter));
+
+            if (!string.IsNullOrWhiteSpace(userNameFilter))
+                query = query.Where(x => x.UserName.Contains(userNameFilter));
+
+            // Show Item In Page
+
+            int take = 5;
+            int skip = (pageId - 1) * take;
+
+            var model = new UserForAdminViewModel
+            {
+                CurrentPage = pageId,
+                PageCount = query.Count() / take,
+                Users = query.OrderBy(u => u.RegisterDate).Skip(skip).Take(take).ToList()
+            };
+
+            return model;
         }
 
         public List<WalletViewModel> GetUserWallet(string userName)
@@ -236,6 +352,42 @@ namespace TopLearn.Core.Services
             var email = FixedText.FixEmail(model.Email);
 
             return _context.Users.SingleOrDefault(x => x.Email == email && x.Password == hashedPassword);
+        }
+
+        public void RemoveUser(int userId)
+        {
+            var user = GetUserByUserId(userId);
+            user.IsRemoved = true;
+            UpdateUser(user);
+        }
+
+        public void RestoreUser(int userId)
+        {
+            var user = _context.Users.IgnoreQueryFilters().Single(u => u.UserId == userId);
+            user.IsRemoved = false;
+            UpdateUser(user);
+        }
+
+        public string SaveUserAvatar(string currentAvatar, IFormFile newAvatar)
+        {
+            string imagePath = "";
+            if (currentAvatar != "Default.gif")
+            {
+                imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/UserAvatars", currentAvatar);
+                if (File.Exists(imagePath))
+                {
+                    File.Delete(imagePath);
+                }
+            }
+
+            currentAvatar = Generator.Generator.GenerateUniqCode() + Path.GetExtension(newAvatar.FileName);
+            imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/UserAvatars", currentAvatar);
+            using (var stream = new FileStream(imagePath, FileMode.Create))
+            {
+                newAvatar.CopyTo(stream);
+            }
+
+            return currentAvatar;
         }
 
         public void UpdateUser(User user)
