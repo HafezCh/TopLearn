@@ -10,11 +10,10 @@ namespace TopLearn.DataLayer.Entities.Course
         public int GroupId { get; set; }
 
         [Display(Name = "عنوان گروه")]
-        [Required(ErrorMessage = "مقادیر این فیلد الزامی است")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]
         public string GroupTitle { get; set; }
-
-        [Display(Name = "حذف شده؟")]
+        [Display(Name = "حذف شده ؟")]
         public bool IsRemoved { get; set; }
 
         [Display(Name = "گروه اصلی")]
@@ -24,6 +23,12 @@ namespace TopLearn.DataLayer.Entities.Course
 
         [ForeignKey("ParentId")]
         public List<CourseGroup> CourseGroups { get; set; }
+
+        [InverseProperty("CourseGroup")]
+        public List<Course> Courses { get; set; }
+
+        [InverseProperty("SGroup")]
+        public List<Course> SubGroup { get; set; }
 
         #endregion
     }

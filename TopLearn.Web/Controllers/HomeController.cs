@@ -1,20 +1,29 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
 using TopLearn.Core.Services.Interfaces;
 
 namespace TopLearn.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IUserService _userService;
+        #region Injections
 
-        public HomeController(IUserService userService)
+        private readonly IUserService _userService;
+        private readonly ICourseService _courseService;
+
+        public HomeController(IUserService userService, ICourseService courseService)
         {
             _userService = userService;
+            _courseService = courseService;
         }
+
+        #endregion
 
         public IActionResult Index()
         {
-            return View();
+            var courses = _courseService.GetCourses();
+            return View(courses);
         }
 
         [HttpGet("OnlinePayment/{id}")]
@@ -40,6 +49,16 @@ namespace TopLearn.Web.Controllers
             }
 
             return View();
+        }
+
+        public JsonResult GetSubGroups(int id)
+        {
+            var groups = new List<SelectListItem>
+            {
+                new SelectListItem{Text = "انتخاب کنید",Value = ""}
+            };
+            groups.AddRange(_courseService.GetSubGroupForManageCourse(id));
+            return Json(new SelectList(groups, "Value", "Text"));
         }
     }
 }
