@@ -272,7 +272,7 @@ namespace TopLearn.Core.Services
             return courseId;
         }
 
-        public List<ShowCourseListItemViewModel> GetCourses(int pageId = 1, string filter = "", string getType = "all", string orderByType = "date", int startPrice = 0, int endPrice = 0, List<int> selectedGroups = null, int take = 0)
+        public Tuple<List<ShowCourseListItemViewModel>, int> GetCourses(int pageId = 1, string filter = "", string getType = "all", string orderByType = "date", int startPrice = 0, int endPrice = 0, List<int> selectedGroups = null, int take = 0)
         {
             if (take == 0)
                 take = 8;
@@ -281,7 +281,7 @@ namespace TopLearn.Core.Services
 
             if (!string.IsNullOrEmpty(filter))
             {
-                result = result.Where(c => c.CourseTitle.Contains(filter));
+                result = result.Where(c => c.CourseTitle.Contains(filter) || c.Tags.Contains(filter));
             }
 
             switch (getType)
@@ -322,24 +322,41 @@ namespace TopLearn.Core.Services
 
             if (endPrice > 0)
             {
-                result = result.Where(c => c.CoursePrice < startPrice);
+                result = result.Where(c => c.CoursePrice < endPrice);
             }
 
 
             if (selectedGroups != null && selectedGroups.Any())
             {
-                //TODo
+                foreach (var group in selectedGroups)
+                {
+                    result = result.Where(c => c.GroupId == group || c.SubGroup == group);
+                }
             }
 
             int skip = (pageId - 1) * take;
 
-            return result.Select(c => new ShowCourseListItemViewModel()
+            var pageCount = result.Count() / take;
+
+            var query = result.Select(c => new ShowCourseListItemViewModel()
             {
                 CourseId = c.CourseId,
                 PictureName = c.CourseImageName,
                 CoursePrice = c.CoursePrice,
-                CourseTitle = c.CourseTitle,
+                CourseTitle = c.CourseTitle
             }).AsNoTracking().Skip(skip).Take(take).ToList();
+
+            return Tuple.Create(query, pageCount);
+        }
+
+        public Course GetCourseForShow(int courseId)
+        {
+            return _context.Courses
+                .Include(e => e.CourseEpisodes)
+                .Include(u => u.User)
+                .Include(s => s.CourseStatus)
+                .Include(l => l.CourseLevel)
+                .FirstOrDefault(c => c.CourseId == courseId);
         }
     }
 }
