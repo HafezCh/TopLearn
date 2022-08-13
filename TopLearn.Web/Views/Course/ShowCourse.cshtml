@@ -1,5 +1,5 @@
 ﻿@using TopLearn.Core.Convertors
-@model TopLearn.DataLayer.Entities.Course.Course
+@model TopLearn.Core.DTOs.Course.ShowCourseViewModel
 @{
     ViewData["Title"] = @Model.CourseTitle;
 }
@@ -186,15 +186,15 @@
                 </div>
 
                 <article class="teacher-info">
-                    <img src="~/UserAvatars/@Model.User.UserAvatar">
-                    <h2> مدرس : @Model.User.UserName </h2>
+                    <img src="~/UserAvatars/@Model.UserAvatar">
+                    <h2> مدرس : @Model.UserName </h2>
                 </article>
 
                 <article class="term-info">
                     <h2> اطلاعات این دوره </h2>
                     <ul>
-                        @*<li>سطح دوره: @Model.CourseLevel.LevelTitle</li>
-                        <li>وضعیت دوره: @Model.CourseStatus.StatusTitle</li>*@
+                        <li>سطح دوره: @Model.LevelTitle</li>
+                        <li>وضعیت دوره: @Model.StatusTitle</li>
                         <li>قیمت : @(Model.CoursePrice == 0 ? "رایگان" : $"{Model.CoursePrice:#,0} تومان")</li>
                         <li>تاریخ ثبت این دوره : @Model.CreateDate.ToFarsi()</li>
                         <li>آخرین بروزرسانی دوره : @Model.UpdateDate.ToFarsi()</li>

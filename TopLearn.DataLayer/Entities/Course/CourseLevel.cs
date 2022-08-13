@@ -14,7 +14,7 @@ namespace TopLearn.DataLayer.Entities.Course
 
         #region Relations
 
-        public List<Course> Courses { get; set; }
+        public virtual List<Course> Courses { get; set; }
 
         #endregion
     }

@@ -349,14 +349,39 @@ namespace TopLearn.Core.Services
             return Tuple.Create(query, pageCount);
         }
 
-        public Course GetCourseForShow(int courseId)
+        public ShowCourseViewModel GetCourseForShow(int courseId)
         {
-            return _context.Courses
+            var course = _context.Courses
                 .Include(e => e.CourseEpisodes)
                 .Include(u => u.User)
-                .Include(s => s.CourseStatus)
-                .Include(l => l.CourseLevel)
-                .FirstOrDefault(c => c.CourseId == courseId);
+                .Select(x => new ShowCourseViewModel
+                {
+                    CourseId = x.CourseId,
+                    StatusId = x.StatusId,
+                    LevelId = x.LevelId,
+                    UserName = x.User.UserName,
+                    CoursePrice = x.CoursePrice,
+                    CourseImageName = x.CourseImageName,
+                    CourseEpisodes = x.CourseEpisodes,
+                    CourseDescription = x.CourseDescription,
+                    CourseTitle = x.CourseTitle,
+                    CreateDate = x.CreateDate,
+                    Tags = x.Tags,
+                    UpdateDate = x.UpdateDate,
+                    DemoFileName = x.DemoFileName,
+                    UserAvatar = x.User.UserAvatar
+                }).FirstOrDefault(c => c.CourseId == courseId);
+
+            if (course != null)
+            {
+                course.StatusTitle = _context.CourseStatus
+                    .SingleOrDefault(s => s.StatusId == course.StatusId)?.StatusTitle;
+
+                course.LevelTitle = _context.CourseLevels
+                    .SingleOrDefault(l => l.LevelId == course.LevelId)?.LevelTitle;
+            }
+
+            return course;
         }
     }
 }

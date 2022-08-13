@@ -22,13 +22,13 @@ namespace TopLearn.DataLayer.Entities.Course
         #region Relations
 
         [ForeignKey("ParentId")]
-        public List<CourseGroup> CourseGroups { get; set; }
+        public virtual List<CourseGroup> CourseGroups { get; set; }
 
         [InverseProperty("CourseGroup")]
-        public List<Course> Courses { get; set; }
+        public virtual List<Course> Courses { get; set; }
 
         [InverseProperty("SGroup")]
-        public List<Course> SubGroup { get; set; }
+        public virtual List<Course> SubGroup { get; set; }
 
         #endregion
     }

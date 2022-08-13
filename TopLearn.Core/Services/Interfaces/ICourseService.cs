@@ -27,7 +27,7 @@ namespace TopLearn.Core.Services.Interfaces
         int AddCourseFromAdmin(Course course, IFormFile imgCourse, IFormFile courseDemo);
         List<ShowCourseForAdminViewModel> GetCoursesForAdmin();
         Course GetCourseDetails(int courseId);
-        Course GetCourseForShow(int courseId);
+        ShowCourseViewModel GetCourseForShow(int courseId);
         void UpdateCourse(Course course, IFormFile imgCourse, IFormFile courseDemo);
 
         #endregion
