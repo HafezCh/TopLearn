@@ -32,7 +32,7 @@
                                             <li> <i class="zmdi zmdi-assignment-account"></i> نام کاربری : @Model.UserName </li>
                                             <li> <i class="zmdi zmdi-email"></i> ایمیل : @Model.Email </li>
                                             <li> <i class="zmdi zmdi-calendar-check"></i> تاریخ عضویت : @Model.RegisterDate.ToFarsi() </li>
-                                            <li> <i class="zmdi zmdi-balance-wallet"></i> موجودی کیف پول : @Model.Wallet تومان </li>
+                                    <li> <i class="zmdi zmdi-balance-wallet"></i> موجودی کیف پول : @Model.Wallet.ToString("#,0") تومان </li>
                                         </ul>
                                     </div>
                                 </div>

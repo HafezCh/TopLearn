@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TopLearn.DataLayer.Context;
 
 namespace TopLearn.DataLayer.Migrations
 {
     [DbContext(typeof(TopLearnDbContext))]
-    partial class TopLearnDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220814145439_UserDiscountCodes")]
+    partial class UserDiscountCodes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,41 +95,6 @@ namespace TopLearn.DataLayer.Migrations
                     b.HasIndex("TeacherId");
 
                     b.ToTable("Courses");
-                });
-
-            modelBuilder.Entity("TopLearn.DataLayer.Entities.Course.CourseComment", b =>
-                {
-                    b.Property<int>("CommentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Comment")
-                        .HasMaxLength(700)
-                        .HasColumnType("nvarchar(700)");
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsAdminRead")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsRemoved")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CommentId");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("CourseComments");
                 });
 
             modelBuilder.Entity("TopLearn.DataLayer.Entities.Course.CourseEpisode", b =>
@@ -570,25 +537,6 @@ namespace TopLearn.DataLayer.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TopLearn.DataLayer.Entities.Course.CourseComment", b =>
-                {
-                    b.HasOne("TopLearn.DataLayer.Entities.Course.Course", "Course")
-                        .WithMany("CourseComments")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TopLearn.DataLayer.Entities.User.User", "User")
-                        .WithMany("CourseComments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("TopLearn.DataLayer.Entities.Course.CourseEpisode", b =>
                 {
                     b.HasOne("TopLearn.DataLayer.Entities.Course.Course", "Course")
@@ -739,8 +687,6 @@ namespace TopLearn.DataLayer.Migrations
 
             modelBuilder.Entity("TopLearn.DataLayer.Entities.Course.Course", b =>
                 {
-                    b.Navigation("CourseComments");
-
                     b.Navigation("CourseEpisodes");
 
                     b.Navigation("OrderDetails");
@@ -793,8 +739,6 @@ namespace TopLearn.DataLayer.Migrations
 
             modelBuilder.Entity("TopLearn.DataLayer.Entities.User.User", b =>
                 {
-                    b.Navigation("CourseComments");
-
                     b.Navigation("Courses");
 
                     b.Navigation("UserCourses");

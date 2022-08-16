@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using TopLearn.DataLayer.Entities.Order;
 
 namespace TopLearn.DataLayer.Entities.Course
 {
@@ -56,19 +57,24 @@ namespace TopLearn.DataLayer.Entities.Course
         #region Relations
 
         [ForeignKey("TeacherId")]
-        public virtual User.User User { get; set; }
+        public User.User User { get; set; }
 
         [ForeignKey("GroupId")]
-        public virtual CourseGroup CourseGroup { get; set; }
+        public CourseGroup CourseGroup { get; set; }
 
         [ForeignKey("SubGroup")]
-        public virtual CourseGroup SGroup { get; set; }
+        public CourseGroup SGroup { get; set; }
 
-        public virtual CourseStatus CourseStatus { get; set; }
+        public CourseStatus CourseStatus { get; set; }
 
-        public virtual CourseLevel CourseLevel { get; set; }
+        public CourseLevel CourseLevel { get; set; }
 
-        public virtual List<CourseEpisode> CourseEpisodes { get; set; }
+        public List<CourseEpisode> CourseEpisodes { get; set; }
+
+        public List<OrderDetail> OrderDetails { get; set; }
+
+        public List<UserCourse> UserCourses { get; set; }
+        public List<CourseComment> CourseComments { get; set; }
 
         #endregion
     }

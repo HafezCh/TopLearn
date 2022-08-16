@@ -32,6 +32,7 @@ namespace TopLearn.Core.DTOs.Course
         public string LevelTitle { get; set; }
         public string UserName { get; set; }
         public string UserAvatar { get; set; }
+        public int UsersCount { get; set; }
         public string CourseDescription { get; set; }
         public int CoursePrice { get; set; }
         public string Tags { get; set; }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TopLearn.DataLayer.Context;
 
 namespace TopLearn.DataLayer.Migrations
 {
     [DbContext(typeof(TopLearnDbContext))]
-    partial class TopLearnDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220813135713_Orders")]
+    partial class Orders
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,41 +95,6 @@ namespace TopLearn.DataLayer.Migrations
                     b.HasIndex("TeacherId");
 
                     b.ToTable("Courses");
-                });
-
-            modelBuilder.Entity("TopLearn.DataLayer.Entities.Course.CourseComment", b =>
-                {
-                    b.Property<int>("CommentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Comment")
-                        .HasMaxLength(700)
-                        .HasColumnType("nvarchar(700)");
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsAdminRead")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsRemoved")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CommentId");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("CourseComments");
                 });
 
             modelBuilder.Entity("TopLearn.DataLayer.Entities.Course.CourseEpisode", b =>
@@ -220,63 +187,15 @@ namespace TopLearn.DataLayer.Migrations
                     b.ToTable("CourseStatus");
                 });
 
-            modelBuilder.Entity("TopLearn.DataLayer.Entities.Course.UserCourse", b =>
-                {
-                    b.Property<int>("UC_Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UC_Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserCourses");
-                });
-
-            modelBuilder.Entity("TopLearn.DataLayer.Entities.Order.Discount", b =>
-                {
-                    b.Property<int>("DiscountId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("DiscountCode")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<int>("DiscountRate")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("UsableCount")
-                        .HasColumnType("int");
-
-                    b.HasKey("DiscountId");
-
-                    b.ToTable("Discounts");
-                });
-
             modelBuilder.Entity("TopLearn.DataLayer.Entities.Order.Order", b =>
                 {
                     b.Property<int>("OrderId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
@@ -311,9 +230,6 @@ namespace TopLearn.DataLayer.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Price")
                         .HasColumnType("int");
 
                     b.Property<int>("UnitPrice")
@@ -436,28 +352,6 @@ namespace TopLearn.DataLayer.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("TopLearn.DataLayer.Entities.User.UserDiscountCode", b =>
-                {
-                    b.Property<int>("UD_Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("DiscountId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UD_Id");
-
-                    b.HasIndex("DiscountId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserDiscountCodes");
-                });
-
             modelBuilder.Entity("TopLearn.DataLayer.Entities.User.UserRole", b =>
                 {
                     b.Property<int>("UR_Id")
@@ -570,25 +464,6 @@ namespace TopLearn.DataLayer.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TopLearn.DataLayer.Entities.Course.CourseComment", b =>
-                {
-                    b.HasOne("TopLearn.DataLayer.Entities.Course.Course", "Course")
-                        .WithMany("CourseComments")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TopLearn.DataLayer.Entities.User.User", "User")
-                        .WithMany("CourseComments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("TopLearn.DataLayer.Entities.Course.CourseEpisode", b =>
                 {
                     b.HasOne("TopLearn.DataLayer.Entities.Course.Course", "Course")
@@ -605,25 +480,6 @@ namespace TopLearn.DataLayer.Migrations
                     b.HasOne("TopLearn.DataLayer.Entities.Course.CourseGroup", null)
                         .WithMany("CourseGroups")
                         .HasForeignKey("ParentId");
-                });
-
-            modelBuilder.Entity("TopLearn.DataLayer.Entities.Course.UserCourse", b =>
-                {
-                    b.HasOne("TopLearn.DataLayer.Entities.Course.Course", "Course")
-                        .WithMany("UserCourses")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TopLearn.DataLayer.Entities.User.User", "User")
-                        .WithMany("UserCourses")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TopLearn.DataLayer.Entities.Order.Order", b =>
@@ -682,25 +538,6 @@ namespace TopLearn.DataLayer.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("TopLearn.DataLayer.Entities.User.UserDiscountCode", b =>
-                {
-                    b.HasOne("TopLearn.DataLayer.Entities.Order.Discount", "Discount")
-                        .WithMany("UserDiscountCodes")
-                        .HasForeignKey("DiscountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TopLearn.DataLayer.Entities.User.User", "User")
-                        .WithMany("UserDiscountCodes")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Discount");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("TopLearn.DataLayer.Entities.User.UserRole", b =>
                 {
                     b.HasOne("TopLearn.DataLayer.Entities.User.Role", "Role")
@@ -739,13 +576,9 @@ namespace TopLearn.DataLayer.Migrations
 
             modelBuilder.Entity("TopLearn.DataLayer.Entities.Course.Course", b =>
                 {
-                    b.Navigation("CourseComments");
-
                     b.Navigation("CourseEpisodes");
 
                     b.Navigation("OrderDetails");
-
-                    b.Navigation("UserCourses");
                 });
 
             modelBuilder.Entity("TopLearn.DataLayer.Entities.Course.CourseGroup", b =>
@@ -765,11 +598,6 @@ namespace TopLearn.DataLayer.Migrations
             modelBuilder.Entity("TopLearn.DataLayer.Entities.Course.CourseStatus", b =>
                 {
                     b.Navigation("Courses");
-                });
-
-            modelBuilder.Entity("TopLearn.DataLayer.Entities.Order.Discount", b =>
-                {
-                    b.Navigation("UserDiscountCodes");
                 });
 
             modelBuilder.Entity("TopLearn.DataLayer.Entities.Order.Order", b =>
@@ -793,13 +621,7 @@ namespace TopLearn.DataLayer.Migrations
 
             modelBuilder.Entity("TopLearn.DataLayer.Entities.User.User", b =>
                 {
-                    b.Navigation("CourseComments");
-
                     b.Navigation("Courses");
-
-                    b.Navigation("UserCourses");
-
-                    b.Navigation("UserDiscountCodes");
 
                     b.Navigation("UserRoles");
 

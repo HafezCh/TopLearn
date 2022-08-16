@@ -42,5 +42,12 @@ namespace TopLearn.Core.Services.Interfaces
         int DeleteEpisode(int episodeId);
 
         #endregion
+
+        #region Comment
+
+        Tuple<List<CourseComment>, int> GetCourseComments(int courseId, int pageId = 1);
+        void AddComment(CourseComment comment);
+
+        #endregion
     }
 }

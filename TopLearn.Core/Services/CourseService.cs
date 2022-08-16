@@ -369,7 +369,8 @@ namespace TopLearn.Core.Services
                     Tags = x.Tags,
                     UpdateDate = x.UpdateDate,
                     DemoFileName = x.DemoFileName,
-                    UserAvatar = x.User.UserAvatar
+                    UserAvatar = x.User.UserAvatar,
+                    UsersCount = x.UserCourses.Count
                 }).FirstOrDefault(c => c.CourseId == courseId);
 
             if (course != null)
@@ -382,6 +383,33 @@ namespace TopLearn.Core.Services
             }
 
             return course;
+        }
+
+        public Tuple<List<CourseComment>, int> GetCourseComments(int courseId, int pageId = 1)
+        {
+            var take = 5;
+            var skip = (pageId - 1) * take;
+            int pageCount = _context.CourseComments.Count(c => c.CourseId == courseId) / take;
+
+            if ((pageCount % 2) != 0)
+            {
+                pageCount += 1;
+            }
+
+            var comments = _context.CourseComments
+            .Include(u => u.User)
+            .Where(c => c.CourseId == courseId)
+            .OrderByDescending(c => c.CreationDate)
+            .Skip(skip).Take(take)
+            .AsNoTracking().ToList();
+
+            return Tuple.Create(comments, pageCount);
+        }
+
+        public void AddComment(CourseComment comment)
+        {
+            _context.CourseComments.Add(comment);
+            _context.SaveChanges();
         }
     }
 }

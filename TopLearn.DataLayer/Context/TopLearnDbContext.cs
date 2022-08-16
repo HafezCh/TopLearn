@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TopLearn.DataLayer.Entities.Course;
+using TopLearn.DataLayer.Entities.Order;
 using TopLearn.DataLayer.Entities.Permission;
 using TopLearn.DataLayer.Entities.User;
 using TopLearn.DataLayer.Entities.Wallet;
@@ -17,6 +18,7 @@ namespace TopLearn.DataLayer.Context
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<UserDiscountCode> UserDiscountCodes { get; set; }
 
         #endregion
 
@@ -41,6 +43,16 @@ namespace TopLearn.DataLayer.Context
         public DbSet<CourseLevel> CourseLevels { get; set; }
         public DbSet<CourseEpisode> CourseEpisodes { get; set; }
         public DbSet<CourseStatus> CourseStatus { get; set; }
+        public DbSet<UserCourse> UserCourses { get; set; }
+        public DbSet<CourseComment> CourseComments { get; set; }
+
+        #endregion
+
+        #region Order
+
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<Discount> Discounts { get; set; }
 
         #endregion
 
@@ -50,6 +62,7 @@ namespace TopLearn.DataLayer.Context
             modelBuilder.Entity<Role>(c => c.HasQueryFilter(r => !r.IsRemoved));
             modelBuilder.Entity<CourseGroup>(c => c.HasQueryFilter(g => !g.IsRemoved));
             modelBuilder.Entity<Course>(c => c.HasQueryFilter(c => !c.IsRemoved));
+            modelBuilder.Entity<CourseComment>(c => c.HasQueryFilter(c => !c.IsRemoved));
 
             base.OnModelCreating(modelBuilder);
         }
