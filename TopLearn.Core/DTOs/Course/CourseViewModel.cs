@@ -19,7 +19,7 @@ namespace TopLearn.Core.DTOs.Course
         public string CourseTitle { get; set; }
         public int CoursePrice { get; set; }
         public string PictureName { get; set; }
-        //public TimeSpan TotalTime { get; set; }
+        //public long TotalTime { get; set; }
     }
 
     public class ShowCourseViewModel

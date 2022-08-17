@@ -2,6 +2,7 @@
 @model TopLearn.Core.DTOs.User.LoginViewModel
 @{
     ViewData["Title"] = "ورود";
+    var redirectPath = ViewBag.RedirectPath;
 }
 
 <div class="container">
@@ -20,12 +21,23 @@
             <div class="alert alert-success">
                 <p class="help-block">ورود با موفقیت انجام شد</p>
             </div>
-
-            <script>
-                // Your delay in milliseconds
-                var delay = 3000;
-                setTimeout(function() { window.location = "/UserPanel"; }, delay);
-            </script>
+            
+            @if (string.IsNullOrWhiteSpace(redirectPath))
+            {
+                <script>
+                    // Your delay in milliseconds
+                    var delay = 3000;
+                    setTimeout(function () { window.location = "https://localhost:5001/UserPanel"; }, delay);
+                </script>
+            }
+            else
+            {
+                <script>
+                 // Your delay in milliseconds
+                 var delay = 3000;
+                 setTimeout(function() { window.location = "https://localhost:5001" + "@redirectPath"; }, delay);
+             </script>
+            }
         }
         @if (ViewBag.EditProfile == true)
         {
@@ -38,7 +50,7 @@
         <div class="form-layer">
 
             <form asp-controller="Account" asp-action="Login" method="post">
-
+                <input type="hidden" name="redirectedPath" value="@ViewBag.RedirectedPath" />
                 <div class="input-group">
                     <span class="input-group-addon" id="email-address"><i class="zmdi zmdi-email"></i></span>
                     <input asp-for="Email" class="form-control" placeholder="ایمیل" aria-describedby="email-address">

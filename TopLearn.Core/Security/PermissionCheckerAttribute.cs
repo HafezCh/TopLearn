@@ -23,7 +23,7 @@ namespace TopLearn.Core.Security
                 var userName = context.HttpContext.User.Identity.Name;
                 if (!_permissionService.CheckPermission(_permissionId, userName))
                 {
-                    context.Result = new RedirectResult("/Login");
+                    context.Result = new RedirectResult($"/Login?redirectedPath={context.HttpContext.Request.Path}");
                 }
             }
             else

@@ -78,15 +78,16 @@ namespace TopLearn.Web.Controllers
         #region Login
 
         [HttpGet("Login")]
-        public IActionResult Login(bool editProfile = false)
+        public IActionResult Login(bool editProfile = false, string redirectedPath = "")
         {
             ViewBag.EditProfile = editProfile;
+            ViewBag.RedirectedPath = redirectedPath;
             return View();
         }
 
         [HttpPost("Login")]
         [ValidateAntiForgeryToken]
-        public IActionResult Login(LoginViewModel command)
+        public IActionResult Login(LoginViewModel command, string redirectedPath = "")
         {
             if (!ModelState.IsValid) return View(command);
 
@@ -111,6 +112,7 @@ namespace TopLearn.Web.Controllers
                     HttpContext.SignInAsync(principal, properties);
 
                     ViewBag.IsSuccess = true;
+                    ViewBag.RedirectPath = redirectedPath;
                     return View();
                 }
                 else

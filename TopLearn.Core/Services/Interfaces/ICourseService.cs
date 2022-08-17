@@ -17,6 +17,9 @@ namespace TopLearn.Core.Services.Interfaces
         List<SelectListItem> GetTeachers();
         List<SelectListItem> GetLevels();
         List<SelectListItem> GetStatues();
+        CourseGroup GetGroupById(int groupId);
+        void AddGroup(CourseGroup group);
+        void UpdateGroup(CourseGroup group);
 
         #endregion
 
@@ -26,6 +29,7 @@ namespace TopLearn.Core.Services.Interfaces
             string orderByType = "date", int startPrice = 0, int endPrice = 0, List<int> selectedGroups = null, int take = 0);
         int AddCourseFromAdmin(Course course, IFormFile imgCourse, IFormFile courseDemo);
         List<ShowCourseForAdminViewModel> GetCoursesForAdmin();
+        List<ShowCourseListItemViewModel> GetPopularCourses();
         Course GetCourseDetails(int courseId);
         ShowCourseViewModel GetCourseForShow(int courseId);
         void UpdateCourse(Course course, IFormFile imgCourse, IFormFile courseDemo);
