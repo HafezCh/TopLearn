@@ -99,5 +99,20 @@ namespace TopLearn.Web.Controllers
 
             return View(comments);
         }
+
+        public IActionResult CourseVote(int id)
+        {
+            return PartialView(_courseService.GetCourseVotes(id));
+        }
+
+        [Authorize]
+        public IActionResult AddVote(int id, bool vote)
+        {
+            var userId = _userService.GetUserIdByUserName(User.Identity.Name);
+
+            _courseService.AddVote(userId, id, vote);
+
+            return PartialView("CourseVote", _courseService.GetCourseVotes(id));
+        }
     }
 }

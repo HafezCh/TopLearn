@@ -444,5 +444,35 @@ namespace TopLearn.Core.Services
         {
             return _context.CourseGroups.Find(groupId);
         }
+
+        public void AddVote(int userId, int courseId, bool vote)
+        {
+            var userVote = _context.CourseVotes.FirstOrDefault(v => v.UserId == userId && v.CourseId == courseId);
+
+            if (userVote != null)
+            {
+                userVote.Vote = vote;
+            }
+            else
+            {
+                userVote = new CourseVote
+                {
+                    CourseId = courseId,
+                    UserId = userId,
+                    Vote = vote
+                };
+
+                _context.CourseVotes.Add(userVote);
+            }
+
+            _context.SaveChanges();
+        }
+
+        public Tuple<int, int> GetCourseVotes(int courseId)
+        {
+            var votes = _context.CourseVotes.Where(v => v.CourseId == courseId).Select(v => v.Vote);
+
+            return Tuple.Create(votes.Count(v => v), votes.Count(v => !v));
+        }
     }
 }

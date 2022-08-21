@@ -1152,3 +1152,10 @@ main#home-page{
         text-align: center;
     }
 }
+
+.btnLike {
+    width: 24px !important;
+    float: right;
+    margin: 0 !important;
+    margin-left: 6px !important;
+}

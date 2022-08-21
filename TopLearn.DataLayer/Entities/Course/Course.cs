@@ -66,15 +66,12 @@ namespace TopLearn.DataLayer.Entities.Course
         public CourseGroup SGroup { get; set; }
 
         public CourseStatus CourseStatus { get; set; }
-
         public CourseLevel CourseLevel { get; set; }
-
         public List<CourseEpisode> CourseEpisodes { get; set; }
-
         public List<OrderDetail> OrderDetails { get; set; }
-
         public List<UserCourse> UserCourses { get; set; }
         public List<CourseComment> CourseComments { get; set; }
+        public List<CourseVote> CourseVotes { get; set; }
 
         #endregion
     }

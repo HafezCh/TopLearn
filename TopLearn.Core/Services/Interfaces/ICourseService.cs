@@ -53,5 +53,12 @@ namespace TopLearn.Core.Services.Interfaces
         void AddComment(CourseComment comment);
 
         #endregion
+
+        #region Course Vote
+
+        void AddVote(int userId, int courseId, bool vote);
+        Tuple<int, int> GetCourseVotes(int courseId);
+
+        #endregion
     }
 }

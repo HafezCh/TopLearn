@@ -52,6 +52,13 @@
                     <img src="~/Course/Image/@Model.CourseImageName">
 
                     @Html.Raw(Model.CourseDescription)
+                    
+                    @if (!string.IsNullOrEmpty(Model.DemoFileName))
+                    {
+                        <video style="width: 100%" controls poster="/course/image/@Model.CourseImageName">
+                            <source src="/course/demoes/@Model.DemoFileName"/>
+                        </video>
+                    }
 
                     @if (!isUserInCourse)
                     {
@@ -59,6 +66,10 @@
                             <p>بعد از ثبت نام در این دوره و تایید فاکتور لینک های دانلود برای شما فعال خواهد شد</p>
                         </div>
                     }
+                    
+                    <div id="divVote">
+
+                    </div>
 
                     <h2> سرفصل های این دوره : </h2>
                     <ul>
@@ -215,6 +226,16 @@
 
         function pageComment(pageid) {
             $("#listComment").load("/Course/ShowComment/" + @Model.CourseId+"?pageId="+pageid);
+        }
+
+        $(function() {
+            $("#divVote").load("/Course/CourseVote/@Model.CourseId");
+        });
+
+        function vote(voteParameter) {
+            $("#divVote").fadeOut('slow');
+            $("#divVote").load("/Course/AddVote/@(Model.CourseId)?vote=" + voteParameter);
+            $("#divVote").fadeIn('slow');
         }
     </script>
 }
